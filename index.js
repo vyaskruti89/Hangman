@@ -32,7 +32,7 @@ while (tries > 1 && hiddenWord.join('')!== randomWord){
     console.log('==================')
     console.log('=>Tries: ${tries}')
     console.log('=>',hiddenWord.join(''))
-    const answer = readline-sync.question("Please guess a letter: ")
+    const answer = prompt.question("Please guess a letter: ")
 
 if(isLetterinWord(answer, randomWord)){
     hiddenWord = replaceMatches(answer,randomWord,hiddenWord)
