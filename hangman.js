@@ -15,21 +15,23 @@ let letter;
 //insert letters by user
 let replacing = [];
 
-//letters previously gussed
+// all the letters the user had previously guessed
+// in one round are stored in this array, which is cleared
+// out after each round
 let guessed = [];
 
-//user start with tries
+// each round, the user starts off with 6 tries, and loses 1
+// for each incorrect guess they make
 let tries = 6;
 
-// each round user wins
+// this variable will increment by 1 for each round the user has won
 let roundsWon = 0;
 
-// game round user plays
+// this variable will increment by 1 for each round the user has played
 let roundsPlayed = 0;
 
-
- // pick the random word and push '_' and replace mached letter 
-
+// randomly pick a word from the word bank and push '_' characters
+// to fillin equal to the number of letters in the selected word
 function pickRandomWord(){
     randomword = wordBank[Math.floor(Math.random() * wordBank.length)].split();
     hiddenword = randomword.toString().split("");
@@ -38,18 +40,17 @@ function pickRandomWord(){
     });
 }
 
-//------- start game----
-
+// Is this the user's first time playing?
+// If so, print this message.
 console.log("Welcome to Hangman!");
-
+// play the game
 startgame();
 
 function startgame(){
-    // pick a random word from the  wordbank
-
-    getRandomWord();    
+    // pick a random word from the bank
+    pickRandomWord();
+    
     console.log("Press ctrl+c to stop.\n");
-
     // run until the user fully guesses the word or runs out of tries
     while (replacing.indexOf('_') !== -1 && tries > 0){
         // How many tries does the user have left?
