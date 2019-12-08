@@ -1,4 +1,3 @@
- 
 const prompt = require("readline-sync");
 const wordBank = require("./word-bank.json");
 
@@ -22,10 +21,96 @@ let guessed = [];
 let tries = 6;
 
 // each round user wins
-let roundsWon = 0;
+let winner = 0;
 
 // game round user plays
-let roundsPlayed = 0;
+let gameround = 0;
+
+// body parts
+let top = "_______";
+let rope = "|     |";
+let pole = "|     "; // 5
+let platform = "_________";
+let head = "|     o";
+let body = "|     |";
+let leftArm = "|    /|\\";
+let rightArm = "|    /|";
+let leg1 = "|    / \\";
+let leg2 = "|    /";
+
+
+
+console.log(top)
+console.log(rope)
+console.log(pole)
+console.log(pole)
+console.log(pole)
+console.log(platform)
+
+const drawMan = (tries) =>
+{
+    if (tries === 5) {
+        console.log(top)
+        console.log(rope)
+        console.log(pole)
+        console.log(pole)
+        console.log(pole)
+        console.log(platform)
+    }
+    if (tries === 4) {
+        console.log(top)
+        console.log(rope)
+        console.log(head)
+        console.log(pole)
+        console.log(pole)
+        console.log(platform)
+    }
+    if (tries === 3) {
+        console.log(top)
+        console.log(rope)
+        console.log(head)
+        console.log(body)
+        console.log(pole)
+        console.log(platform)
+    }
+    if (tries === 2) {
+        console.log(top)
+        console.log(rope)
+        console.log(head)
+        console.log(rightArm)
+        console.log(pole)
+        console.log(platform)
+    }
+    if (tries === 1) {
+        console.log(top)
+        console.log(rope)
+        console.log(head)
+        console.log(leftArm)
+        console.log(pole)
+        console.log(platform)
+    }
+    if (tries === 0) {
+        console.log(top)
+        console.log(rope)
+        console.log(head)
+        console.log(leftArm)
+        console.log(leg2)
+        console.log(platform)
+    }
+    if (tries === 0) {
+        console.log(top)
+        console.log(rope)
+        console.log(head)
+        console.log(rightArm)
+        console.log(leg1)
+        console.log(platform)
+    }
+
+
+};
+
+drawMan();
+
 
 
  // pick the random word and push '_' and replace mached letter 
@@ -45,34 +130,35 @@ console.log("Welcome to Hangman!");
 startgame();
 
 function startgame(){
-    // pick a random word from the  wordbank
 
-    getRandomWord();    
+    // pick a random word from the  wordbank
+    pickRandomWord();    
     console.log("Press ctrl+c to stop.\n");
 
-    // run until the user fully guesses the word or runs out of tries
+    
+
+    // get letters till tries last
     while (replacing.indexOf('_') !== -1 && tries > 0){
-        // How many tries does the user have left?
+        drawMan(tries);
+
+        // showing tries progress to player
         console.log("Remaining tries = " + tries);
 
-        // show the word the player is trying to fill in, with
-        // whitespaces between each letter or underscore character
+        // show the word progress to player 
         console.log(replacing.join(" "));
 
-        // obtain a guess from the user, converting it to a lowercase letter
+        // Get guess form player
         letter = prompt.question("Please guess a letter: ").toLowerCase();
 
-        // Did the user input a letter character?
+        // single letter 
         if (/[a-zA-Z]/.test(letter)){
-            // check the length of the user input in case they inputted
-            // more than one letter
             checkUserInput();
 
-            // Had the user guessed that letter already?
+            // Already guessed letter
             if(guessed.includes(letter)){
                 console.log("Sorry, you have already guessed that letter.");
             }
-            // Or had the user NOT guessed that letter already?
+            // Or haven't guessed letter 
             else{
                 // If the letter is in the word, go to
                 // rightGuess.
@@ -86,18 +172,18 @@ function startgame(){
                 }
             }
         }
-        // If the user inputted a non-alphabetic character or the ctrl+c command,
+        // If the player guessing charactor other than letters or the ctrl+c command,
         // either ignore that input or end gameplay.
         else{
             console.log();
         }
     }
 }
+ 
+    // for single letter:If typed more than one letter accept first letter
 
 function checkUserInput(){
-    // Did the user input more than one letter character?
-    // If so, accept only the first letter of the
-    // input and ignore everything else.
+   
     if (letter.length > 1){
         letter = letter[0];
     }
@@ -105,7 +191,7 @@ function checkUserInput(){
 
 function rightGuess(hiddenword, letter){
     let newarr = [];
-    // push each instance of the correct letter into newarr
+    // push correct letter into newarr
     hiddenword.forEach((c, i) => {
         if (c === letter){
             newarr.push(i);
@@ -113,22 +199,22 @@ function rightGuess(hiddenword, letter){
         
     });
 
-    // using newarr, replace each '_' with each instance of the guessed letter
+    // using newarr, replace each '_' with  the guessed letter
     newarr.forEach((c) => {
         replacing.splice(c, 1, letter);
     });
     
     guessed.push(letter);
 
-    // Did the user guess all the letters in the word?
+    // Did the player guess all the letters in the word?
     if (replacing.indexOf('_') === -1){
         console.log("Yay!! You did it!!");
 
-        roundsWon++;
-        roundsPlayed++;
+        winner++;
+        gameround++;
 
         // How many rounds have been played and won so far?
-        console.log("Games won: " + roundsWon + " out of " + roundsPlayed);
+        console.log("Games won: " + winner + " out of " + gameround);
 
         // clear out all arrays and strings (except letter)
         // by setting their length properties to 0
@@ -150,17 +236,18 @@ function wrongGuess(){
     tries--;
     guessed.push(letter);
 
-    // Did the user run out of tries?
+    // Did the player run out of tries?
     if (tries === 0){
         console.log("Round Over");
 
-        // reveal the word to the user
+        // reveal the word to the player
+        console.log("Better next luck time.")
         console.log("The word was '" + randomword + "'.\n");
 
-        roundsPlayed++;
+        gameround++;
 
         // How many games have been played and won so far?
-        console.log("Games won: " + roundsWon + " out of " + roundsPlayed);
+        console.log("Games won: " + winner + " out of " + gameround);
 
         // clear out all arrays and strings (except letter)
         // by setting their length properties to 0
